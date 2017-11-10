@@ -1,3 +1,4 @@
 # dog-treat-dispenser
 
-Code, CAD, and build instructions commming soon
+
+CAD, and build instructions commming soon
