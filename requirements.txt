@@ -1,0 +1,6 @@
+Flask==0.12.1
+twilio==6.8.3
+dropbox==6.8.0
+RPi.GPIO==0.6.3
+picamera==1.13
+
