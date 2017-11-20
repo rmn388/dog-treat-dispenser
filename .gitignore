@@ -1,6 +1,10 @@
+#Ignore
 __pycache__/
 config.py
 *.swp
 *.swo
 *.jpg
 *.pyc
+
+#Allow
+!cad/*.jpg
