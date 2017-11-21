@@ -4,10 +4,10 @@ import dropbox
 import picamera
 
 class Photo(object):
-    date_time = datetime.datetime.now().strftime("%Y-%m-%d-%H;%M;%S")
-    default_filename = ("photos/Pic-{}.jpg").format(date_time)
     
-    def __init__(self, filename = default_filename):
+    def __init__(self):
+        date_time = datetime.datetime.now().strftime("%Y-%m-%d-%H;%M;%S")
+        filename = ("photos/Pic-{}.jpg").format(date_time)
         self.filename = filename
         
     def take_picture(self, width = 3280, height = 2464):
