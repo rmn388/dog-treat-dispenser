@@ -12,6 +12,8 @@ Blog post with a high level overview of the project: http://richnelson.me/side-p
 - [2. Raspberry Pi Setup](#raspberrypi)  
 
 <a name="gettingstarted"/>
+
+
 ## 1. Getting Started
 
 This detailed tutorial section is a work in progress.
@@ -33,13 +35,15 @@ This tutorial will cover:
 If there are any issues, please report them in the bug tracker for this repository.
 
 <a name="raspberrypi"/>
+
+
 ## 2. Raspberry Pi Setup
 IMPORTANT: Make sure the power supply you use for four Raspberry Pi has a high enough current rating.  2.5A is recommended, but I find 2A+ to keep things working smoothly.  A Raspberry Pi that is not getting enough current can act unpredictably when processes ramp up and the current draw increases,  I learned this the hard way trying to debug an issue for a week that was caused by an inadequate power supply and I've talked to many people with similar experiences.
 
 ### Downloading the Repository and setting up the virtual environment
 Log onto your Raspberry Pi with Raspbian installed.  _(A Raspberry Pi 3 Model B with Raspbian stretch in my case)_.  You can plug directly into the Pi with an HDMI screen, mouse, and keyboard.  Or if the Pi is already on your network you can connect via SSH or VNC,  I'll be using VNC for this tutorial.
 
-![Raspberry Pi open terminal](/image_assets/open-terminal.jpg)
+![Raspberry Pi open terminal](https://imgur.com/Pca8yHA.jpg)
 
 
 Make sure you are connected to the internet through your home network.
@@ -178,7 +182,7 @@ Expected Output:
 
 This means the server is running!  The first output line "Running on ..." Shows the URL of the server on the local machine.  So you can open up a browser window on the pi and type it in, you should see this.
 
-![Raspberry Pi open terminal](/image_assets/server-test.jpg)
+![Flask server test](https://imgur.com/4E2npO5.jpg)
 
 You can also visit the server from any computer that is on the same network, but you will need to use the Pi's local network IP address instead of 0.0.0.0.  To find the Pi's IP address type __ifconfig__ in the terminal, it is the "inet" address for me in the wlan section since I'm on wifi.  It usually starts with 192.168.  So you can substitute that for the "0.0.0.0" to test the server from any computer on your network.
 
