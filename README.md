@@ -40,15 +40,18 @@ If there are any issues, please report them in the bug tracker for this reposito
 ## 2. Raspberry Pi Setup
 IMPORTANT: Make sure the power supply you use for four Raspberry Pi has a high enough current rating.  2.5A is recommended, but I find 2A+ to keep things working smoothly.  A Raspberry Pi that is not getting enough current can act unpredictably when processes ramp up and the current draw increases,  I learned this the hard way trying to debug an issue for a week that was caused by an inadequate power supply and I've talked to many people with similar experiences.
 
+Log onto your Raspberry Pi with Raspbian Stretch installed.  _(A Raspberry Pi 3 Model B with Raspbian stretch in my case)_.  You can plug directly into the Pi with an HDMI screen, mouse, and keyboard.  Or if the Pi is already on your network you can connect via SSH or VNC ([official documentation here](https://www.raspberrypi.org/documentation/remote-access/)),  I'll be using VNC for this tutorial.
+
 ### Downloading the Repository and setting up the virtual environment
-Log onto your Raspberry Pi with Raspbian installed.  _(A Raspberry Pi 3 Model B with Raspbian stretch in my case)_.  You can plug directly into the Pi with an HDMI screen, mouse, and keyboard.  Or if the Pi is already on your network you can connect via SSH or VNC,  I'll be using VNC for this tutorial.
+
+Log on to your Pi and make sure you are connected to you home network.
+
+Then Open up a terminal.
 
 ![Raspberry Pi open terminal](https://imgur.com/Pca8yHA.jpg)
 
 
-Make sure you are connected to the internet through your home network.
-
-Create a local copy of this repository.
+Create a local copy of the dog-treat-dispenser repository using the following command.
 
 Terminal Input:
 ```bash
@@ -143,9 +146,22 @@ Successfully installed Flask-0.12.1 Jinja2-2.10 MarkupSafe-1.0 PyJWT-1.5.3 RPi.G
 
  Next we need to create a configuration file which will contain all of the settings for your project.
 
- Create a file called config.py in the root directory of your project,  this can be done with the terminal text editor of choice, or with a gui by navigating to the project folder and creating the file.
+ Create a file called config.py in the root directory of your project.
 
- config.py
+This can be done with the terminal text editor of choice, like nano or vi:
+```bash
+nano config.py
+```
+```bash
+vi config.py
+```
+
+**OR**
+
+With a GUI by navigating to the project folder and creating the file.
+
+Copy the following into the new file and save it.
+
  ```python
  #config
 
@@ -184,6 +200,8 @@ This means the server is running!  The first output line "Running on ..." Shows 
 
 ![Flask server test](https://imgur.com/4E2npO5.jpg)
 
+Congratulations you have a live Python Flask webserver! Flask is a great lightweight web framework for Python.
+
 You can also visit the server from any computer that is on the same network, but you will need to use the Pi's local network IP address instead of 0.0.0.0.  To find the Pi's IP address type __ifconfig__ in the terminal, it is the "inet" address for me in the wlan section since I'm on wifi.  It usually starts with 192.168.  So you can substitute that for the "0.0.0.0" to test the server from any computer on your network.
 
 When you visit the URL the terminal window that is running the server should show a log like this:
@@ -192,6 +210,62 @@ When you visit the URL the terminal window that is running the server should sho
 ```
 
 To shutdown the server press Ctrl-C
+
+## Configure your PI with a static IP address for your local network
+
+You can already access the server form the internet, now you'll need to set up port forwarding on your router to direct traffic on a particular port to your server.
+
+By default your router will randomly assign an IP address to your Pi, but for this project or any web server we need to make sure it is always the same.  First you need to configure your Raspberry Pi with a static IP address.  This can be done it the router settings so it always assigns the same IP address to the Pi, feel free to do that if you know how, but for this tutorial we will do it from the Pi.
+
+To find the current IP address of your Raspberry Pi
+
+Terminal Input:
+```bash
+ifconfig
+```
+Your looking for the inet address for the network device that you're using. If you on wifi it will be something like **wlan0**.
+
+```bash
+wlan0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.0.10  netmask 255.255.255.0  broadcast 192.168.0.255
+        inet6 fe80::110e:7c25:e726:57ba  prefixlen 64  scopeid 0x20<link>
+        ether b8:27:eb:61:ee:df  txqueuelen 1000  (Ethernet)
+        RX packets 1681  bytes 95988 (93.7 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 2004  bytes 2621320 (2.4 MiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+```
+
+In this case our local IP address is 192.168.0.10 it was usually start with 192.168, the 3rd number can change router by router, and the last number will be different for all of the devices on your network.
+
+You will need to remember the network device in my case **wlan0** and the first 3 sections of the IP address in my case **192.168.0**
+
+Edit the DHCPCD configuration file with your proffered text editor.   I'll be using vi but you can use nano, or navigate to edit the file with the graphic interface.
+
+Terminal Input:
+```bash
+sudo vi /etc/dh
+```
+
+There should be sample configuration settings commented out by #s. Add the following two lines to configure your static IP address, but make sure to substitute your information from the last step for the interface and first 3 segments of the IP address.
+```
+interface wlan0
+static ip_address=192.168.0.220
+```
+
+I choose 220 but it can technically be any number between 1-254.  The caveat is that there is a chance that your router already assigned the IP to another device,  usually the lower number are assigned first, so number above 200 are safer.  In your router settings you can limit the dynamically assigned IPs to a certain range, but this shouldn't be necessary.
+
+Save the file, then to restart the pi so that the new changes take effect.
+
+Terminal Input to restart:
+```bash
+sudo reboot now
+```
+
+If you're connected remotely through SSH or VNC,  you'll have to connect using the new IP address, in my case 192.168.0.220
+
+### Configure Your Router for Port Forwarding
+
 
 
 
